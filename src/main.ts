@@ -13,11 +13,28 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 /* import specific icons */
-import { faAppleWhole, faDollar, faDollarSign, faSadCry, faShip, faSmile } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAppleWhole,
+  faDollar,
+  faDollarSign,
+  faSadCry,
+  faShip,
+  faSmile,
+  faArrowRotateForward,
+} from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 /* add icons to the library */
-library.add(faGoogle, faAppleWhole, faSmile, faSadCry, faShip, faDollar, faDollarSign);
+library.add(
+  faGoogle,
+  faAppleWhole,
+  faSmile,
+  faSadCry,
+  faShip,
+  faDollar,
+  faDollarSign,
+  faArrowRotateForward,
+);
 
 const app = createApp(App);
 
