@@ -21,6 +21,9 @@ import {
   faShip,
   faSmile,
   faArrowRotateForward,
+  faBars,
+  faCaretDown,
+  faCaretUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
@@ -34,6 +37,9 @@ library.add(
   faDollar,
   faDollarSign,
   faArrowRotateForward,
+  faBars,
+  faCaretDown,
+  faCaretUp
 );
 
 const app = createApp(App);

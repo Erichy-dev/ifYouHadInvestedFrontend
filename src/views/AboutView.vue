@@ -3,7 +3,7 @@ document.title = "About If I Had Invested - Eric Nyaga";
 </script>
 
 <template>
-  <main class="self-center w-10/12">
+  <main class="self-center w-10/12 mt-5 p-4">
     <p class="flex flex-col space-y-4">
       <span>Hi there...<br /></span>
       <span
@@ -12,7 +12,7 @@ document.title = "About If I Had Invested - Eric Nyaga";
       >
       <span>
         <span class="italic font-mono">(dang-it!!! here it comes...) </span>
-        <span class="font-extrabold text-green-600 text-lg"
+        <span class="font-extrabold text-green-600 text-xl font-serif"
           >IF I HAD INVESTED</span
         >
       </span>
@@ -21,7 +21,7 @@ document.title = "About If I Had Invested - Eric Nyaga";
         stocks? Then you are in the right place my guy!<br
       /></span>
       <span>
-        We've got a sea of stocks you can swim in my friend. From Apple
+        We've got a sea of stocks you can swim through. From Apple
         <font-awesome-icon
           icon="fa-solid fa-apple-whole"
           class="text-orange-600 h-5"
