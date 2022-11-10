@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import ReasonsYouShouldInvestVue from "@/views/ReasonsYouShouldInvest.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,7 +23,7 @@ const router = createRouter({
     {
       path: "/top10ReasonsToInvest",
       name: "top10ReasonsToInvest",
-      component: () => import("../views/ReasonsYouShouldInvest.vue"),
+      component: ReasonsYouShouldInvestVue,
     },
     {
       path: "/:pathMatch(.*)*",
