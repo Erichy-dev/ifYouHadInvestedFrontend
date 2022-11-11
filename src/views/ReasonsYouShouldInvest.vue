@@ -7,7 +7,7 @@ import HeadingVue from "@/components/ReasonsToInvest/HeadingVue.vue";
 import TableOfContents from "@/components/ReasonsToInvest/TableOfContents.vue";
 import CashIsTrash from "@/components/ReasonsToInvest/CashIsTrash.vue";
 import GrowYourMOney from "@/components/ReasonsToInvest/GrowYourMoney.vue";
-import IntroductionVue from "@/components/ReasonsToInvest/GrowYourMoney.vue";
+import IntroductionVue from "@/components/ReasonsToInvest/IntroductionVue.vue";
 import HistoricallyGoneUp from "@/components/ReasonsToInvest/HistoricallyGoneUp.vue";
 import PowerOfCompounding from "@/components/ReasonsToInvest/PowerOfCompounding.vue";
 import EarnMore from "@/components/ReasonsToInvest/EarnMore.vue";
@@ -27,12 +27,12 @@ document.title =
 const navigateToTop: Ref<HTMLElement | null> = ref(null);
 const showNavigateTop = ref(false);
 const showNavigateBottom = ref(true);
+const footerHeight = 700;
 document.addEventListener("scroll", () => {
   window.scrollY >= 100
     ? (showNavigateTop.value = true)
     : (showNavigateTop.value = false);
-  window.scrollY >=
-  document.body.offsetHeight - (useCounterStore().footerPosition + 150)
+  window.scrollY >= document.body.offsetHeight - footerHeight
     ? (showNavigateBottom.value = false)
     : (showNavigateBottom.value = true);
 });
