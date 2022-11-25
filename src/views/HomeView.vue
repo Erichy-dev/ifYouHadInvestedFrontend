@@ -35,7 +35,7 @@ function showResults() {
   if (userAmount.value && userDate.value) {
     axios({
       method: "post",
-      url: "stocks",
+      url: "superYatchs/stocks",
       data: new FormData(form.value as HTMLFormElement),
     })
       .then((res) => {
@@ -80,7 +80,7 @@ let num = 0;
 
 axios({
   method: "get",
-  url: "stocksList",
+  url: "superYatchs/stocksList",
 })
   .then(async (res) => {
     fetchedStocks.value = res.data.stocks;
@@ -211,7 +211,7 @@ function removeOpacity(idToRemove: string) {
               <font-awesome-icon icon="fa-solid fa-dollar-sign" class="h-5" />
             </label>
             <input
-              class="border rounded-md p-1 border-black text-black"
+              class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
               id="amount"
               name="amount"
               type="number"
@@ -239,7 +239,7 @@ function removeOpacity(idToRemove: string) {
               </button>
             </div>
             <select
-              class="border rounded-md p-1 border-black text-black w-full text-xs"
+              class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-full text-xs"
               id="stock"
               name="stock"
             >
@@ -259,7 +259,7 @@ function removeOpacity(idToRemove: string) {
           <div class="flex flex-col">
             <label for="dateOfStock">On</label>
             <input
-              class="border rounded-lg p-1 border-black text-black"
+              class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
               type="date"
               id="dateOfStock"
               name="dateSelected"

@@ -21,11 +21,15 @@ import {
   faShip,
   faSmile,
   faArrowRotateForward,
+  faEnvelope,
+  faUser,
+  faBriefcaseClock,
   faBars,
+  faWindowClose,
   faCaretDown,
   faCaretUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { faGoogle, faTwitter } from "@fortawesome/free-brands-svg-icons";
 
 /* add icons to the library */
 library.add(
@@ -37,9 +41,14 @@ library.add(
   faDollar,
   faDollarSign,
   faArrowRotateForward,
+  faTwitter,
+  faEnvelope,
+  faUser,
+  faBriefcaseClock,
   faBars,
   faCaretDown,
-  faCaretUp
+  faCaretUp,
+  faWindowClose
 );
 
 const app = createApp(App);

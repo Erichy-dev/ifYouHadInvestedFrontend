@@ -1,5 +1,8 @@
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { computed, ref, onMounted } from "vue";
+import { useCounterStore } from "../stores/counter";
+
+const signedIn = computed(() => useCounterStore().signedIn);
 
 const toggleNavIf = ref(false);
 const guide = ref<HTMLElement | null>(null);
@@ -53,7 +56,7 @@ function outsideToggle(e: Event) {
     }
   }
 }
-if (window.outerWidth >= 768) {
+if (window.innerWidth >= 768) {
   toggleNavIf.value = true;
 }
 </script>
@@ -74,7 +77,7 @@ if (window.outerWidth >= 768) {
     />
     <transition name="toastNav">
       <div
-        class="flex md:flex-row md:ml-20 px-1 text-sm flex-1"
+        class="flex md:flex-row px-1 text-xs flex-1"
         ref="guide"
         id="guide"
         v-show="toggleNavIf"
@@ -90,16 +93,31 @@ if (window.outerWidth >= 768) {
           <button
             class="lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 underline-offset-4 hover:translate-y-2 hover:rotate-6 transition-all duration-1000"
           >
-            WHY INVEST
+            BLOG
+          </button>
+        </router-link>
+        <router-link class="flex-1" to="/IIIAffiliate">
+          <button
+            class="lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 underline-offset-4 hover:translate-y-2 hover:rotate-6 transition-all duration-1000"
+          >
+            AFFILIATE
           </button>
         </router-link>
         <router-link class="flex-1" to="/about">
           <button
             class="lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 underline-offset-4 hover:translate-y-2 hover:rotate-6 transition-all duration-1000"
           >
-            ABOUT ME
+            ABOUT
           </button>
         </router-link>
+        <transition name="toastNav" appear>
+          <router-link to="/associate" v-if="signedIn" class="mr-1">
+            <font-awesome-icon
+              icon="fa-solid fa-user"
+              class="h-10 text-sky-700"
+            />
+          </router-link>
+        </transition>
       </div>
     </transition>
   </main>
