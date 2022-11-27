@@ -39,7 +39,7 @@ axios({
       class="flex flex-col p-2 space-y-1 text-sm md:text-xl flex-1 text-green-600"
     >
       <div
-        class="flex flex-row justify-between border-b-2 border-sky-600 text-xl md:text-2xl text-slate-400"
+        class="flex flex-row justify-between border-b-2 border-sky-600 text-xl md:text-2xl text-white"
       >
         <h3>INVESTOR</h3>
         <h3>AMOUNT(Ksh)</h3>

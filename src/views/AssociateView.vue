@@ -265,7 +265,7 @@ function loadMessage() {
             :max="earnedAmount"
             id="withdraw"
             name="withdraw"
-            class="text-slate-200 p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-4/12"
+            class="text-white p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-4/12"
           />
         </div>
         <p
@@ -273,10 +273,10 @@ function loadMessage() {
           v-if="depositPrompt"
           key="withdrawPrompt"
         >
-          Please &nbsp;<a
-            href="/IIIAffiliate#affiliateTerms"
+          Please &nbsp;<router-link
+            to="/affiliateTerms"
             class="underline text-green-600"
-            >Deposit</a
+            >Deposit</router-link
           >
           &nbsp; to start Earning.
         </p>
@@ -371,7 +371,7 @@ function loadMessage() {
               placeholder="Your Full Names"
               v-model="deleteFullNames"
               name="deleteUserName"
-              class="text-slate-200 p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-4/12 bg-opacity-20"
+              class="text-white p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-4/12 bg-opacity-20"
             />
             <input
               type="text"
@@ -387,7 +387,7 @@ function loadMessage() {
               id="password"
               required
               name="password"
-              class="text-slate-200 p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-4/12 bg-opacity-20"
+              class="text-white p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-4/12 bg-opacity-20"
             />
           </div>
           <transition name="toast">

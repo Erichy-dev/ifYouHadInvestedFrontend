@@ -16,7 +16,7 @@ const guideClass = [
   "top-14",
   "font-extrabold",
   "border-b",
-  "border-b-green-600",
+  "border-b-green-400",
   "w-screen",
   "py-1",
   "space-y-2",
@@ -72,7 +72,7 @@ if (window.innerWidth >= 768) {
     </div>
     <font-awesome-icon
       icon="fa-solid fa-bars"
-      class="text-green-600 h-3 mr-2 toggleGuide md:hidden border border-green-600 rounded-md p-1 shadow-lg drop-shadow-lg"
+      class="text-green-400 h-5 mr-2 toggleGuide md:hidden border border-green-400 rounded-md p-1 shadow-lg drop-shadow-lg"
       @click="toggleGuide"
     />
     <transition name="toastNav">

@@ -63,10 +63,10 @@ function signOut() {
               to="/topEarners"
               >Top Earners</router-link
             >
-            <a
-              href="#affiliateTerms"
+            <router-link
+              to="/affiliateTerms"
               class="underline decoration-sky-600 text-red-600 underline-offset-2 decoration-1"
-              >Terms And conditions</a
+              >Terms And conditions</router-link
             >
           </div>
         </div>
@@ -122,78 +122,6 @@ function signOut() {
         </p>
         <p>CEO Alphy</p>
       </div>
-    </div>
-    <div id="affiliateTerms" class="min-h-screen flex place-items-center">
-      <section>
-        <a href="#affiliateTerms"
-          ><h3
-            class="text-2xl md:text-4xl underline decoration-sky-600 text-red-600 underline-offset-2 decoration-1 place-items-center flex flex-col mb-2"
-          >
-            TERMS AND CONDITIONS
-          </h3></a
-        >
-        <ul class="list-disc font-semibold">
-          <li>
-            The user's username should be
-            <span
-              class="text-xl text-green-800 font-black underline underline-offset-2 decoration-red-700"
-              >unique</span
-            >
-          </li>
-          <li>
-            To register, the user should send
-            <span
-              class="text-xl text-green-800 font-black underline underline-offset-2 decoration-red-700"
-              >Ksh. 1 via MPESA</span
-            >
-            to
-            <span
-              class="text-xl text-green-800 font-black underline underline-offset-2 decoration-red-700"
-              >0110178773</span
-            >
-            to help verify his phone number and full names
-          </li>
-          <li>
-            The User's full names should match the names appearing in his
-            <span
-              class="text-xl text-green-800 font-black underline underline-offset-2 decoration-red-700"
-              >registered phone number</span
-            >
-          </li>
-          <li>
-            The withdrawals will be processed in
-            <span
-              class="text-xl text-green-800 font-black underline underline-offset-2 decoration-red-700"
-              >24 hours</span
-            >
-          </li>
-          <li>
-            Withdrawals can be made on
-            <span
-              class="text-xl text-green-800 font-black underline underline-offset-2 decoration-red-700"
-              >any day</span
-            >
-            except Sarturday and Sunday
-          </li>
-          <li>
-            The affiliate amount is
-            <span
-              class="text-xl text-green-800 font-black underline underline-offset-2 decoration-red-700"
-              >Ksh. 50</span
-            >
-          </li>
-          <li>
-            You will get a
-            <span
-              class="text-xl text-green-800 font-black underline underline-offset-2 decoration-red-700"
-              >60%</span
-            >
-            return for every successful referral sign up. Which means after 2
-            referrals you account will be running on profit.
-          </li>
-          <li>The user can delete his account and re-create a new one</li>
-        </ul>
-      </section>
     </div>
     <div class="min-h-screen flex flex-col">
       <div class="flex flex-col flex-1">

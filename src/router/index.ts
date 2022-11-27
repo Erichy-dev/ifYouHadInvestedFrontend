@@ -9,6 +9,7 @@ import ConfirmSignup from "@/views/ConfirmSignup.vue";
 import TopEarners from "@/views/TopEarners.vue";
 import AboutViewVue from "@/views/AboutView.vue";
 import ResultsViewVue from "@/views/ResultsView.vue";
+import TermsAndConditionsVue from "@/views/TermsAndConditions.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,6 +48,11 @@ const router = createRouter({
       path: "/signUp",
       name: "signUp",
       component: SignUp,
+    },
+    {
+      path: "/affiliateTerms",
+      name: "affiliateTerms",
+      component: TermsAndConditionsVue,
     },
     {
       path: "/associate",

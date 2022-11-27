@@ -39,9 +39,7 @@ axios({
 
 <template>
   <main class="text-lg flex flex-col self-center md:w-8/12 lg:w-5/12 mt-10 p-4">
-    <h1 class="text-4xl font-bold self-center mb-5 text-slate-600 font-serif">
-      RESULTS
-    </h1>
+    <h1 class="text-4xl font-bold self-center mb-5 font-serif">RESULTS</h1>
     <p class="flex flex-col space-y-3">
       <span
         >If you had bought:
