@@ -338,13 +338,14 @@ function loadMessage() {
         >
           WITHDRAW
         </button>
-        <!-- <router-link
-          class="self-center bg-gradient-to-tr from-slate-600 to-green-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif disabled:opacity-30"
+        <router-link
+          class="self-center bg-gradient-to-tr from-green-600 to-sky-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif disabled:opacity-30"
+          v-if="useCounterStore().signedIn"
           to="investorPreviousActivities"
           key="investorPreviousActivities"
         >
-          <button>PREVIOUS ACTIVITIES</button>
-        </router-link> -->
+          PREVIOUS ACTIVITIES
+        </router-link>
         <form
           ref="deleteForm"
           v-if="deletePrompt"

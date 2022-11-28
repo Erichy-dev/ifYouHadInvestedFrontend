@@ -111,11 +111,18 @@ if (window.innerWidth >= 768) {
           </button>
         </router-link>
         <transition name="toastNav" appear>
-          <router-link to="/associate" v-if="signedIn" class="mr-1">
+          <router-link
+            to="/associate"
+            v-if="signedIn"
+            class="mr-1 flex flex-col"
+          >
             <font-awesome-icon
               icon="fa-solid fa-user"
               class="h-10 text-sky-700"
             />
+            <p class="text-sm text-orange-600 font-black">
+              {{ useCounterStore().userName.substring(0, 5) + ".." }}
+            </p>
           </router-link>
         </transition>
       </div>

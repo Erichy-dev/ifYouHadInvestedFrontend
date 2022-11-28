@@ -10,6 +10,7 @@ import TopEarners from "@/views/TopEarners.vue";
 import AboutViewVue from "@/views/AboutView.vue";
 import ResultsViewVue from "@/views/ResultsView.vue";
 import TermsAndConditionsVue from "@/views/TermsAndConditions.vue";
+import RecentActivitiesVue from "@/views/RecentActivities.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,6 +54,11 @@ const router = createRouter({
       path: "/affiliateTerms",
       name: "affiliateTerms",
       component: TermsAndConditionsVue,
+    },
+    {
+      path: "/investorPreviousActivities",
+      name: "investorPreviousActivities",
+      component: RecentActivitiesVue
     },
     {
       path: "/associate",

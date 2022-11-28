@@ -16,13 +16,13 @@ onMounted(() => {
       <a href="mailto:erichnyaga1@gmail.com">
         <font-awesome-icon
           icon="fa-solid fa-envelope"
-          class="h-5 hover:text-green-600"
+          class="h-5 hover:text-green-600 text-orange-600"
         />
       </a>
       <a href="https://twitter.com/riki_dev_">
         <font-awesome-icon
           icon="fa-brands fa-twitter"
-          class="h-5 hover:text-green-600"
+          class="h-5 hover:text-green-600 text-orange-600"
         />
       </a>
     </form>
