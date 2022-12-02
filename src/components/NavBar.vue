@@ -69,10 +69,8 @@ function showDetails(ev: MouseEvent) {
     let x_pstn = `${ev.clientX}px`;
     let y_pstn = `${ev.clientY}px`;
     showInfo.value = true;
-    if (
-      (ev.currentTarget as HTMLElement).offsetLeft >
-      document.body.offsetWidth - 100
-    ) {
+    const elem = ev.currentTarget as HTMLElement;
+    if (elem.offsetLeft > document.body.offsetWidth - (elem.clientWidth + 10)) {
       x_pstn = `${ev.clientX / 1.2}px`;
       y_pstn = `${ev.clientY + 10}px`;
     }
@@ -138,7 +136,7 @@ function hideDetails() {
           class="flex-1 lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 hover:translate-y-2 hover:rotate-6 transition-all duration-1000 flex place-content-center"
           @mousemove="showDetails"
           @mouseout="hideDetails"
-          to="/about"
+          to="/affiliateTerms"
         >
           ABOUT
         </router-link>

@@ -7,7 +7,6 @@ import SignUp from "@/views/SignUp.vue";
 import AssociateView from "@/views/AssociateView.vue";
 import ConfirmSignup from "@/views/ConfirmSignup.vue";
 import TopEarners from "@/views/TopEarners.vue";
-import AboutViewVue from "@/views/AboutView.vue";
 import ResultsViewVue from "@/views/ResultsView.vue";
 import TermsAndConditionsVue from "@/views/TermsAndConditions.vue";
 import RecentActivitiesVue from "@/views/RecentActivities.vue";
@@ -25,11 +24,6 @@ const router = createRouter({
       path: "/results",
       name: "results",
       component: ResultsViewVue,
-    },
-    {
-      path: "/about",
-      name: "about",
-      component: AboutViewVue,
     },
     {
       path: "/top10ReasonsToInvest",
