@@ -12,6 +12,7 @@ const password = ref("");
 const invalid = ref(false);
 
 const navigate = useRouter();
+
 function signIn() {
   axios({
     method: "post",
@@ -72,6 +73,7 @@ function signIn() {
           type="password"
           required
           name="password"
+          id="password"
           placeholder="password"
           class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
           v-model="password"
