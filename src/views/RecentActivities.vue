@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import type { Ref } from "vue";
-import { useCounterStore } from '@/stores/counter';
+import { useCounterStore } from "@/stores/counter";
 import axios from "axios";
 
 type recentActivitiesSchema = {
@@ -28,7 +28,9 @@ axios({
 
 <template>
   <main class="flex flex-col self-center md:w-7/12 lg:w-5/12">
-    <h1 class="text-xl md:text-4xl self-center flex-1 flex place-items-center my-5">
+    <h1
+      class="text-xl md:text-4xl self-center flex-1 flex place-items-center my-5"
+    >
       <span class="text-sky-600">Your Recent Activities</span>
     </h1>
     <form

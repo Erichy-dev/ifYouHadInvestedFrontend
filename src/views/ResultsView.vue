@@ -27,13 +27,13 @@ interface YatchSchema {
 const yatchsArray: Ref<YatchSchema[] | null> = ref(null);
 axios({
   method: "get",
-  url: "superYatchs",
+  url: "superYatchs/superYatchs",
 })
   .then((res) => {
     yatchsArray.value = res.data;
   })
   .catch((err) => {
-    //
+    console.log(err.message);
   });
 </script>
 

@@ -5,8 +5,8 @@ import NavBar from "@/components/NavBar.vue";
 import BodyFooter from "./components/BodyFooter.vue";
 import { useCounterStore } from "./stores/counter";
 
-// axios.defaults.baseURL = "https://ifihadinvested.pythonanywhere.com/";
-axios.defaults.baseURL = "http://127.0.0.1:8000/";
+axios.defaults.baseURL = "https://ifihadinvested.pythonanywhere.com/";
+// axios.defaults.baseURL = "http://127.0.0.1:8000/";
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
@@ -21,7 +21,7 @@ axios({
     }
   })
   .catch((err) => {
-    // console.log("me");
+    console.log(err.message);
   });
 </script>
 

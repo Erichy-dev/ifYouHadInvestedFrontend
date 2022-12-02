@@ -19,7 +19,7 @@ axios({
     topEarners.value = res.data;
   })
   .catch((err) => {
-    //
+    console.log(err.message);
   });
 </script>
 

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { watch, ref } from "vue";
 import type { Ref } from "vue";
 import GoogleRecaptcha from "../components/GoogleRecaptcha.vue";
 import axios from "axios";
@@ -51,8 +51,45 @@ function createProfile() {
         }
       })
       .catch((err) => {
-        //
+        console.log(err.message);
       });
+  }
+}
+
+const password2Ref: Ref<HTMLInputElement | null> = ref(null);
+watch(password2, () => {
+  dynamicInputError(
+    password1,
+    password2,
+    password2Ref as Ref<HTMLInputElement>
+  );
+});
+</script>
+
+<script lang="ts">
+export function dynamicInputError(
+  input1: Ref<string>,
+  input2: Ref<string>,
+  inputElement: Ref<HTMLInputElement>
+) {
+  if (input2.value !== input1.value) {
+    inputElement.value.classList.remove(
+      "focus:shadow-green-600",
+      "focus:ring-green-500"
+    );
+    inputElement.value.classList.add(
+      "focus:shadow-red-600",
+      "focus:ring-red-500"
+    );
+  } else {
+    inputElement.value.classList.add(
+      "focus:shadow-green-600",
+      "focus:ring-green-500"
+    );
+    inputElement.value.classList.remove(
+      "focus:shadow-red-600",
+      "focus:ring-red-500"
+    );
   }
 }
 </script>
@@ -166,15 +203,16 @@ function createProfile() {
           id="affiliateAmount"
         />
         <!-- <select
-          name="affiliateAmount"
-          id="affiliateAmount"
+          name="referral_amount"
+          id="referral_amount"
           required
-          placeholder="Your afiiliate amount"
           class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
         >
           <option value="50" selected>50</option>
           <option value="100">100</option>
           <option value="200">200</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
         </select> -->
       </div>
       <div class="flex flex-row justify-between">
@@ -199,6 +237,7 @@ function createProfile() {
           class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
           type="password"
           v-model="password2"
+          ref="password2Ref"
           required
           placeholder="repeat password"
           id="password2"

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, ref, onMounted } from "vue";
+import type { Ref } from "vue";
 import { useCounterStore } from "../stores/counter";
 
 const signedIn = computed(() => useCounterStore().signedIn);
@@ -59,16 +60,43 @@ function outsideToggle(e: Event) {
 if (window.innerWidth >= 768) {
   toggleNavIf.value = true;
 }
+
+const showInfo = ref(false);
+const showInfoRef: Ref<HTMLElement | null> = ref(null);
+const showInfoMessage = ref("");
+function showDetails(ev: MouseEvent) {
+  if (toggleNavIf.value) {
+    let x_pstn = `${ev.clientX}px`;
+    let y_pstn = `${ev.clientY}px`;
+    showInfo.value = true;
+    if (
+      (ev.currentTarget as HTMLElement).offsetLeft >
+      document.body.offsetWidth - 100
+    ) {
+      x_pstn = `${ev.clientX / 1.2}px`;
+      y_pstn = `${ev.clientY + 10}px`;
+    }
+    (showInfoRef.value as HTMLElement).style.left = x_pstn;
+    (showInfoRef.value as HTMLElement).style.top = y_pstn;
+    showInfoMessage.value =
+      "Visit The " +
+      (ev.currentTarget as HTMLElement).innerText.toLowerCase() +
+      " page";
+  }
+}
+function hideDetails() {
+  showInfo.value = false;
+}
 </script>
 
 <template>
   <main class="flex flex-row mt-5 border-b-2 border-slate-300 pb-5" id="navBar">
     <div class="flex-1 flex flex-col">
-      <h1
-        class="text-lg md:text-2xl lg:text-4xl font-bold font-serif shadow-green-600 shadow-lg drop-shadow-lg self-center"
+      <router-link
+        to="/"
+        class="w-fit text-lg md:text-2xl lg:text-4xl font-bold font-serif shadow-green-600 shadow-lg drop-shadow-lg self-center"
+        ><h1>IF I HAD INVESTED</h1></router-link
       >
-        IF I HAD INVESTED
-      </h1>
     </div>
     <font-awesome-icon
       icon="fa-solid fa-bars"
@@ -77,38 +105,42 @@ if (window.innerWidth >= 768) {
     />
     <transition name="toastNav">
       <div
-        class="flex md:flex-row px-1 text-xs flex-1"
+        class="flex md:flex-row px-1 text-xs flex-1 md:space-x-5"
         ref="guide"
         id="guide"
         v-show="toggleNavIf"
       >
-        <router-link class="flex-1" to="/">
-          <button
-            class="lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 underline-offset-4 hover:translate-y-2 hover:rotate-6 transition-all duration-1000"
-          >
-            HOME
-          </button>
+        <router-link
+          class="flex-1 lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 hover:translate-y-2 hover:rotate-6 transition-all duration-1000 flex place-content-center"
+          @mousemove="showDetails"
+          @mouseout="hideDetails"
+          to="/"
+        >
+          HOME
         </router-link>
-        <router-link class="flex-1" to="/top10ReasonsToInvest">
-          <button
-            class="lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 underline-offset-4 hover:translate-y-2 hover:rotate-6 transition-all duration-1000"
-          >
-            BLOG
-          </button>
+        <router-link
+          class="flex-1 lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 hover:translate-y-2 hover:rotate-6 transition-all duration-1000 flex place-content-center"
+          @mousemove="showDetails"
+          @mouseout="hideDetails"
+          to="/top10ReasonsToInvest"
+        >
+          BLOG
         </router-link>
-        <router-link class="flex-1" to="/IIIAffiliate">
-          <button
-            class="lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 underline-offset-4 hover:translate-y-2 hover:rotate-6 transition-all duration-1000"
-          >
-            AFFILIATE
-          </button>
+        <router-link
+          class="flex-1 lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 hover:translate-y-2 hover:rotate-6 transition-all duration-1000 flex place-content-center"
+          @mousemove="showDetails"
+          @mouseout="hideDetails"
+          to="/IIIAffiliate"
+        >
+          AFFILIATE
         </router-link>
-        <router-link class="flex-1" to="/about">
-          <button
-            class="lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 underline-offset-4 hover:translate-y-2 hover:rotate-6 transition-all duration-1000"
-          >
-            ABOUT
-          </button>
+        <router-link
+          class="flex-1 lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 hover:translate-y-2 hover:rotate-6 transition-all duration-1000 flex place-content-center"
+          @mousemove="showDetails"
+          @mouseout="hideDetails"
+          to="/about"
+        >
+          ABOUT
         </router-link>
         <transition name="toastNav" appear>
           <router-link
@@ -127,6 +159,13 @@ if (window.innerWidth >= 768) {
         </transition>
       </div>
     </transition>
+    <div
+      v-show="showInfo"
+      ref="showInfoRef"
+      class="text-black font-bold bg-gradient-to-tr from-orange-600 via-sky-600 to-green-600 font-serif rounded-xl p-2 text-sm fixed z-50 w-36 overflow-auto"
+    >
+      <p>{{ showInfoMessage }}</p>
+    </div>
   </main>
 </template>
 

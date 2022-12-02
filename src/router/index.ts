@@ -11,6 +11,7 @@ import AboutViewVue from "@/views/AboutView.vue";
 import ResultsViewVue from "@/views/ResultsView.vue";
 import TermsAndConditionsVue from "@/views/TermsAndConditions.vue";
 import RecentActivitiesVue from "@/views/RecentActivities.vue";
+import ReferralsViewVue from "@/views/ReferralsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -58,7 +59,12 @@ const router = createRouter({
     {
       path: "/investorPreviousActivities",
       name: "investorPreviousActivities",
-      component: RecentActivitiesVue
+      component: RecentActivitiesVue,
+    },
+    {
+      path: "/referrals",
+      name: "referrals",
+      component: ReferralsViewVue,
     },
     {
       path: "/associate",

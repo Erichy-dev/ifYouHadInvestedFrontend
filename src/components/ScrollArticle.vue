@@ -1,19 +1,23 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { onUnmounted, ref } from "vue";
 import type { Ref } from "vue";
 
 const navigateToTop: Ref<HTMLElement | null> = ref(null);
 const showNavigateTop = ref(false);
 const showNavigateBottom = ref(true);
 const footerHeight = 700;
-document.addEventListener("scroll", () => {
+document.addEventListener("scroll", helpScrolling);
+onUnmounted(() => {
+  document.removeEventListener("scroll", helpScrolling);
+});
+function helpScrolling() {
   window.scrollY >= 100
     ? (showNavigateTop.value = true)
     : (showNavigateTop.value = false);
   window.scrollY >= document.body.offsetHeight - footerHeight
     ? (showNavigateBottom.value = false)
     : (showNavigateBottom.value = true);
-});
+}
 </script>
 
 <template>

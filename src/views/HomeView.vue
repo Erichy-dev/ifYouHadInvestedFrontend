@@ -4,6 +4,7 @@ import type { Ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import { useCounterStore } from "@/stores/counter";
+import ToastFormError from "@/components/ToastFormError.vue";
 // import { STOCKS, STOCKLength } from "@/stocks";
 
 document.title = "If I Had Invested - Eric Nyaga";
@@ -23,6 +24,19 @@ const userAmount: Ref<number | null> = ref(null);
 const userDate: Ref<string | null> = ref(null);
 const formError = ref("");
 const formInvalid = ref(false);
+
+/**
+ * - toggles errors in the home page form.
+ * @param err - string error to be displayed
+ */
+function toggleFormError(err: string) {
+  formError.value = err;
+  formInvalid.value = true;
+  setTimeout(() => {
+    formInvalid.value = false;
+  }, 10000);
+}
+
 function showResults() {
   useCounterStore().amount = 0;
   useCounterStore().percentageGainLoss = 0;
@@ -39,27 +53,35 @@ function showResults() {
       data: new FormData(form.value as HTMLFormElement),
     })
       .then((res) => {
-        if (res.data === "Weekend" || res.data === "None") {
-          res.data === "Weekend"
-            ? (formError.value = "You've chosen a Weekend")
-            : (formError.value = "Change the Date or Chose a different stock.");
-          formInvalid.value = true;
-          setTimeout(() => {
-            formInvalid.value = false;
-          }, 2000);
-        } else {
-          useCounterStore().amount = res.data["amount"];
-          useCounterStore().percentageGainLoss = res.data["percentageGainLoss"];
-          useCounterStore().profitLoss = res.data["profitLoss"];
-          useCounterStore().stock = res.data["stock"];
-          useCounterStore().dateSelected = res.data["dateSelected"];
-          useCounterStore().totalGainLoss = res.data["totalGainLoss"];
-          useCounterStore().lossBoolean = res.data["lossBoolean"];
-          navigator.push("/results");
+        switch (res.data) {
+          case "Weekend":
+            toggleFormError("You've chosedn a Weekend");
+            break;
+          case "None":
+            toggleFormError("Change the Date or Chose a different stock.");
+            break;
+          case "Connection Error":
+            toggleFormError("Please make sure you have a stable network");
+            break;
+          case "Key Error":
+            toggleFormError("Please fill all details before submiting");
+            break;
+
+          default:
+            useCounterStore().amount = res.data["amount"];
+            useCounterStore().percentageGainLoss =
+              res.data["percentageGainLoss"];
+            useCounterStore().profitLoss = res.data["profitLoss"];
+            useCounterStore().stock = res.data["stock"];
+            useCounterStore().dateSelected = res.data["dateSelected"];
+            useCounterStore().totalGainLoss = res.data["totalGainLoss"];
+            useCounterStore().lossBoolean = res.data["lossBoolean"];
+            navigator.push("/results");
+            break;
         }
       })
       .catch((err) => {
-        // console.log("error");
+        console.log(err.message);
       });
   }
 }
@@ -83,21 +105,25 @@ axios({
   url: "superYatchs/stocksList",
 })
   .then(async (res) => {
-    fetchedStocks.value = res.data.stocks;
-    numberOfStocks.value = fetchedStocks.value.length;
-    fetchedStocks.value.sort((a: string[], b: string[]) => {
-      if (a[1] > b[1]) {
-        return 1;
-      } else {
-        return -1;
-      }
-    });
-    numberOfSharedStocks = Math.round(numberOfStocks.value / 500);
-    num = numberOfStocks.value / numberOfSharedStocks;
-    stockList.value = fetchedStocks.value.slice(0, num);
+    if (res.data === "Connection Error") {
+      toggleFormError("Please make sure you have a stable network connection");
+    } else {
+      fetchedStocks.value = res.data.stocks;
+      numberOfStocks.value = fetchedStocks.value.length;
+      fetchedStocks.value.sort((a: string[], b: string[]) => {
+        if (a[1] > b[1]) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
+      numberOfSharedStocks = Math.round(numberOfStocks.value / 500);
+      num = numberOfStocks.value / numberOfSharedStocks;
+      stockList.value = fetchedStocks.value.slice(0, num);
+    }
   })
   .catch((err) => {
-    // console.log("hello");
+    console.log(err.message);
   });
 
 // onMounted(() => {
@@ -216,7 +242,7 @@ function removeOpacity(idToRemove: string) {
               name="amount"
               type="number"
               required
-              placeholder="Amount"
+              placeholder="Amount To Invest"
               v-model="userAmount"
             />
           </div>
@@ -276,13 +302,7 @@ function removeOpacity(idToRemove: string) {
               class="h-4"
             />ubmit
           </button>
-          <div>
-            <transition name="toast" appear>
-              <p class="absolute text-cyan-700" v-if="formInvalid">
-                {{ formError }}
-              </p>
-            </transition>
-          </div>
+          <ToastFormError :form-error="formError" :form-invalid="formInvalid" />
         </form>
       </section>
     </section>

@@ -31,7 +31,7 @@ function signIn() {
       }
     })
     .catch((err) => {
-      //
+      console.log(err.message);
     });
 }
 </script>

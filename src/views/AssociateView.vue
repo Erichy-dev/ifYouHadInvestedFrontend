@@ -5,6 +5,8 @@ import { useCounterStore } from "../stores/counter";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
+import { dynamicInputError } from "./SignUp.vue";
+
 /**Time to sue when determining whether its morning, afternoon or evening */
 const currentTime: number = new Date().getHours();
 const greetings = ref("");
@@ -48,14 +50,18 @@ axios({
   data: form,
 })
   .then((res) => {
-    investorDetails.value = res.data;
-    earnedAmount.value = (investorDetails.value as investorSchema).earned;
-    earned.value = (investorDetails.value as investorSchema).earned;
-    watch(withdrawalAmount, () => {
-      earned.value = earnedAmount.value - withdrawalAmount.value;
-    });
+    if (res.data !== "None") {
+      investorDetails.value = res.data;
+      earnedAmount.value = (investorDetails.value as investorSchema).earned;
+      earned.value = (investorDetails.value as investorSchema).earned;
+      watch(withdrawalAmount, () => {
+        earned.value = earnedAmount.value - withdrawalAmount.value;
+      });
+    }
   })
-  .catch();
+  .catch((err) => {
+    console.log(err.message);
+  });
 
 /**
  * - make sure there is no pending withdraw request before initiating the withdraw procedure
@@ -143,6 +149,8 @@ const invalidInput = ref("");
 const deleteFullNames = ref("");
 const deleteAccountRef: Ref<HTMLButtonElement | null> = ref(null);
 const password = ref("");
+
+const deleteFullNamesRef: Ref<HTMLInputElement | null> = ref(null);
 watchEffect(() => {
   if (
     deleteFullNames.value ===
@@ -153,6 +161,15 @@ watchEffect(() => {
   ) {
     (deleteAccountRef.value as HTMLButtonElement).disabled = false;
   }
+});
+watch(deleteFullNames, () => {
+  dynamicInputError(
+    deleteFullNames,
+    ref(
+      investorDetails.value?.firstName + " " + investorDetails.value?.lastName
+    ),
+    deleteFullNamesRef as Ref<HTMLInputElement>
+  );
 });
 
 /**
@@ -256,7 +273,7 @@ function loadMessage() {
           v-if="calculateWithdrawal"
           key="calculateWithdrawl"
         >
-          <label for="withdraw">WITHDRAW</label>
+          <label  class="w-fit" for="withdraw">WITHDRAW</label>
           <input
             type="number"
             min="50"
@@ -317,6 +334,22 @@ function loadMessage() {
           WITHDRAWALS
         </button>
         <router-link
+          class="self-center bg-gradient-to-tr from-green-600 to-sky-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif disabled:opacity-30"
+          v-if="useCounterStore().signedIn"
+          to="referrals"
+          key="referrals"
+        >
+          MY REFERRALS
+        </router-link>
+        <router-link
+          class="self-center bg-gradient-to-tr from-green-600 to-sky-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif disabled:opacity-30"
+          v-if="useCounterStore().signedIn"
+          to="investorPreviousActivities"
+          key="investorPreviousActivities"
+        >
+          PREVIOUS ACTIVITIES
+        </router-link>
+        <router-link
           to="/topEarners"
           key="topEarners"
           class="self-center bg-gradient-to-tr from-sky-600 to-green-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif"
@@ -338,71 +371,91 @@ function loadMessage() {
         >
           WITHDRAW
         </button>
-        <router-link
-          class="self-center bg-gradient-to-tr from-green-600 to-sky-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif disabled:opacity-30"
-          v-if="useCounterStore().signedIn"
-          to="investorPreviousActivities"
-          key="investorPreviousActivities"
-        >
-          PREVIOUS ACTIVITIES
-        </router-link>
-        <form
-          ref="deleteForm"
-          v-if="deletePrompt"
-          @submit.prevent=""
-          class="self-center border-b-2 border-sky-600"
+        <section
+          class="flex flex-row border-t-2 border-red-600 pt-4"
           key="deletePrompt"
+          v-if="deletePrompt"
         >
-          <p class="flex flex-col leading-loose">
-            <span
-              >Are you sure you want to delete your account?
-              <font-awesome-icon
-                icon="fa-solid fa-window-close"
-                @click="deletePromptFunc(false, false)"
-                class="text-red-700 ml-4" /></span
-            ><span>Terrible things could happen if you procede.</span
-            ><span>Please fill the in the form below to procede.</span>
-          </p>
-          <div class="flex flex-col space-y-2">
-            <label for="deleteUserName">User Name</label>
-            <input
-              type="text"
-              id="deleteUserName"
-              required
-              placeholder="Your Full Names"
-              v-model="deleteFullNames"
-              name="deleteUserName"
-              class="text-white p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-4/12 bg-opacity-20"
-            />
-            <input
-              type="text"
-              :value="investorDetails?.userName"
-              name="deleteUserName"
-              class="hidden"
-            />
-            <label for="password">Password</label>
-            <input
-              type="password"
-              v-model="password"
-              placeholder="password"
-              id="password"
-              required
-              name="password"
-              class="text-white p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-4/12 bg-opacity-20"
-            />
-          </div>
-          <transition name="toast">
-            <p v-if="invalid" class="text-red-600 self-center text-sm">
-              {{ invalidInput }}
+          <form
+            ref="deleteForm"
+            @submit.prevent=""
+            class="self-center border-b-2 pb-4 border-red-600 space-y-8"
+          >
+            <p class="flex flex-col leading-loose">
+              <span class="text-orange-600"
+                >Are you sure you want to delete your account? </span
+              ><span class="animate-pulse text-orange-200"
+                >TERRIBLE things could happen if you procede.</span
+              ><span class="text-red-600">Please fill the form below:</span>
             </p>
-          </transition>
-        </form>
+            <div class="flex flex-col space-y-2">
+              <label  class="w-fit" for="reasonForDelete">Why Do You Want To Leave?</label>
+              <textarea
+                id="reasonForDelete"
+                name="reason_for_delete"
+                rows="5"
+                required
+                placeholder="e.g. I've achieved my financial target"
+                class="text-white p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 md:w-9/12 bg-opacity-20"
+              ></textarea>
+              <label  class="w-fit" for="reviewCritic"
+                >What's Your Experience at IfIHadInvested</label
+              >
+              <textarea
+                id="reviewCritic"
+                name="review_critic"
+                required
+                rows="5"
+                placeholder="e.g. I had a lovely experience but you've got to upgrade your ..."
+                class="text-white p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 md:w-9/12 bg-opacity-20"
+              ></textarea>
+              <label  class="w-fit" for="deleteFullNames">Full Names</label>
+              <input
+                type="text"
+                id="deleteFullNames"
+                ref="deleteFullNamesRef"
+                required
+                placeholder="e.g. Eric Nyaga"
+                v-model="deleteFullNames"
+                class="text-white p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-6/12 bg-opacity-20"
+              />
+              <input
+                type="text"
+                :value="investorDetails?.userName"
+                name="deleteUserName"
+                class="hidden"
+              />
+              <label  class="w-fit" for="password">Password</label>
+              <input
+                type="password"
+                v-model="password"
+                placeholder="password"
+                id="password"
+                required
+                name="password"
+                class="text-white p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-4/12 bg-opacity-20"
+              />
+            </div>
+            <transition name="toast">
+              <p v-if="invalid" class="text-red-600 self-center text-sm">
+                {{ invalidInput }}
+              </p>
+            </transition>
+          </form>
+          <button class="self-start">
+            <font-awesome-icon
+              icon="fa-solid fa-window-close"
+              @click="deletePromptFunc(false, false)"
+              class="text-red-700 h-9"
+            />
+          </button>
+        </section>
       </transition-group>
     </form>
     <button
       v-if="useCounterStore().signedIn"
       ref="deleteAccountRef"
-      class="text-orange-300 self-center bg-gradient-to-tr from-green-600 to-red-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif my-2 disabled:opacity-40"
+      class="text-orange-200 self-center bg-gradient-to-tr from-green-600 to-red-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu font-serif my-2 disabled:opacity-40"
       key="deleteAccount"
       @click="deleteAccount"
     >
