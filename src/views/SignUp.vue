@@ -281,8 +281,8 @@ export function dynamicInputError(
         </div>
       </div>
       <div class="flex flex-row justify-between">
-        <label for="affiliateAmount" class="flex-1 text-sm md:text-lg"
-          >AFFILIATE AMOUNT</label
+        <label for="affiliateAmount" class="text-sm md:text-lg w-fit"
+          >AFFILIATE AMOUNT <span class="text-red-800">*</span></label
         >
         <div>
           <transition name="toast-input-info">
@@ -292,28 +292,23 @@ export function dynamicInputError(
               >*affiliate amount</span
             >
           </transition>
-          <input
-            class="text-black p-1 border-slate-300 rounded-md bg-slate-300"
-            type="number"
-            disabled
-            value="50"
+          <select
+            name="referral_amount"
             id="affiliateAmount"
+            required
+            class="text-black p-1 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
             @focus="show_input_info($event, 5, '', boolsArray)"
             @focusout="show_input_info($event, 5, '', boolsArray)"
-          />
+          >
+            <option value="50" selected>50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="500">500</option>
+            <option value="1000">1, 000</option>
+            <option value="5000">5, 000</option>
+            <option value="10000">10, 000</option>
+          </select>
         </div>
-        <!-- <select
-          name="referral_amount"
-          id="referral_amount"
-          required
-          class="text-black p-1 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
-        >
-          <option value="50" selected>50</option>
-          <option value="100">100</option>
-          <option value="200">200</option>
-          <option value="500">500</option>
-          <option value="1000">1000</option>
-        </select> -->
       </div>
       <div class="flex flex-row justify-between">
         <label for="password1" class="flex-1 text-sm md:text-lg"

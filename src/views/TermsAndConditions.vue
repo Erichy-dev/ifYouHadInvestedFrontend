@@ -91,7 +91,7 @@ setInterval(() => {
         </li>
         <li>
           You get a
-          <span class="text-xl text-green-400 font-black">60%</span>
+          <span class="text-xl text-green-400 font-black">70%</span>
           return on every successful referral sign up. Which means after 2
           referrals your account will be running on
           <span class="text-xl text-green-400 font-black">profit</span>.
@@ -171,7 +171,7 @@ setInterval(() => {
                 @focusout="show_input_info($event, 2, '', boolsArray)"
                 id="total_earnings"
                 :value="
-                  0.6 * affiliate_amount * number_of_referrals -
+                  0.7 * affiliate_amount * number_of_referrals -
                   affiliate_amount
                 "
                 class="w-7/12 rounded-lg text-black p-1 pl-8 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 focus:ring-1"

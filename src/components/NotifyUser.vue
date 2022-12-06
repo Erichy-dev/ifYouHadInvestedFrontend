@@ -10,7 +10,6 @@ const trueNotify = ref(true);
 function notifyUser() {
   trueNotify.value = !trueNotify.value;
 }
-if(trueNotify.value && useCounterStore().signedIn && userPaid.value) console.log("yoh")
 </script>
 
 <template>
@@ -40,7 +39,13 @@ if(trueNotify.value && useCounterStore().signedIn && userPaid.value) console.log
           />
         </div>
         <p class="text-green-300">
-          Please complete your
+          Please
+          <router-link
+            class="decoration-red-600 underline-offset-4 underline hover:text-red-600"
+            to="/affiliateTerms"
+            >complete</router-link
+          >
+          your
           <router-link
             class="decoration-red-600 underline-offset-4 underline hover:text-red-600"
             to="/associate"
@@ -58,6 +63,9 @@ if(trueNotify.value && useCounterStore().signedIn && userPaid.value) console.log
             to="IIIAffiliate"
             >affiliate program.</router-link
           >
+        </p>
+        <p class="text-green-300">
+          Send Ksh. 1 via MPESA Pochi-La-Biashara to 0110178773.
         </p>
       </section>
     </transition-group>
