@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { ref, watch, watchEffect } from "vue";
+import { ref, watch, onMounted } from "vue";
 import type { Ref } from "vue";
 import { useCounterStore } from "../stores/counter";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
 import { dynamicInputError } from "./SignUp.vue";
+import { show_input_info } from "./SignIn.vue";
 
 /**Time to sue when determining whether its morning, afternoon or evening */
 const currentTime: number = new Date().getHours();
@@ -44,24 +45,26 @@ const withdrawalResponse = ref("");
 
 const form = new FormData();
 form.append("userName", useCounterStore().userName);
-axios({
-  method: "post",
-  url: "associates/associateDetails",
-  data: form,
-})
-  .then((res) => {
-    if (res.data !== "None") {
-      investorDetails.value = res.data;
-      earnedAmount.value = (investorDetails.value as investorSchema).earned;
-      earned.value = (investorDetails.value as investorSchema).earned;
-      watch(withdrawalAmount, () => {
-        earned.value = earnedAmount.value - withdrawalAmount.value;
-      });
-    }
+onMounted(() => {
+  axios({
+    method: "post",
+    url: "associates/associateDetails",
+    data: form,
   })
-  .catch((err) => {
-    console.log(err.message);
-  });
+    .then((res) => {
+      if (res.data !== "None") {
+        investorDetails.value = res.data;
+        earnedAmount.value = (investorDetails.value as investorSchema).earned;
+        earned.value = (investorDetails.value as investorSchema).earned;
+        watch(withdrawalAmount, () => {
+          earned.value = earnedAmount.value - withdrawalAmount.value;
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+});
 
 /**
  * - make sure there is no pending withdraw request before initiating the withdraw procedure
@@ -151,7 +154,14 @@ const deleteAccountRef: Ref<HTMLButtonElement | null> = ref(null);
 const password = ref("");
 
 const deleteFullNamesRef: Ref<HTMLInputElement | null> = ref(null);
-watchEffect(() => {
+watch([deleteFullNames, password], () => {
+  dynamicInputError(
+    deleteFullNames,
+    ref(
+      investorDetails.value?.firstName + " " + investorDetails.value?.lastName
+    ),
+    deleteFullNamesRef as Ref<HTMLInputElement>
+  );
   if (
     deleteFullNames.value ===
       investorDetails.value?.firstName +
@@ -161,15 +171,6 @@ watchEffect(() => {
   ) {
     (deleteAccountRef.value as HTMLButtonElement).disabled = false;
   }
-});
-watch(deleteFullNames, () => {
-  dynamicInputError(
-    deleteFullNames,
-    ref(
-      investorDetails.value?.firstName + " " + investorDetails.value?.lastName
-    ),
-    deleteFullNamesRef as Ref<HTMLInputElement>
-  );
 });
 
 /**
@@ -199,7 +200,7 @@ function deleteAccount() {
           useCounterStore().signedIn = false;
           useCounterStore().userName = "";
         } else {
-          invalidInput.value = "Your Credentials are invalid";
+          invalidInput.value = "Password is incorrect";
           invalid.value = true;
           setTimeout(() => {
             invalid.value = false;
@@ -207,7 +208,7 @@ function deleteAccount() {
         }
       })
       .catch((err) => {
-        //
+        console.log(err.message);
       });
   } else {
     deletePromptFunc(true, true);
@@ -219,6 +220,58 @@ function deleteAccount() {
  */
 function loadMessage() {
   // console.log(event.m)
+}
+
+const amounttowithdrawInput = ref(false);
+const reasonfordeleteInput = ref(false);
+const reviewcriticInput = ref(false);
+const fullnamesInput = ref(false);
+const passwordInput = ref(false);
+const firstnameInput = ref(false);
+const lastnameInput = ref(false);
+const emailInput = ref(false);
+const boolsArray = [
+  amounttowithdrawInput,
+  reasonfordeleteInput,
+  reviewcriticInput,
+  fullnamesInput,
+  passwordInput,
+  firstnameInput,
+  lastnameInput,
+  emailInput,
+];
+
+const update_prompt = ref(false);
+const email = ref(investorDetails.value?.firstName);
+function close_update_prompt() {
+  update_prompt.value = false;
+}
+const update_form: Ref<HTMLFormElement | null> = ref(null);
+function updateAccount() {
+  update_prompt.value = true;
+  if (update_prompt.value) {
+    const fmData = new FormData(update_form.value as HTMLFormElement);
+    axios({
+      method: "post",
+      url: "associates/updateAccount",
+      data: fmData,
+    })
+      .then((res) => {
+        if (res.data === "Updated") {
+          (investorDetails.value as investorSchema).firstName = fmData.get(
+            "first_name"
+          ) as string;
+          (investorDetails.value as investorSchema).lastName = fmData.get(
+            "last_name"
+          ) as string;
+          (investorDetails.value as investorSchema).email = fmData.get(
+            "email"
+          ) as string;
+          update_prompt.value = false;
+        }
+      })
+      .catch((err) => console.log(err.message));
+  }
 }
 </script>
 
@@ -270,20 +323,31 @@ function loadMessage() {
       <transition-group name="toastWithdraw" appear mode="in-out">
         <div
           class="flex flex-row justify-between border-b-2 border-sky-600"
-          v-if="calculateWithdrawal"
           key="calculateWithdrawl"
+          v-if="calculateWithdrawal"
         >
-          <label  class="w-fit" for="withdraw">WITHDRAW</label>
-          <input
-            type="number"
-            min="50"
-            placeholder="50"
-            v-model="withdrawalAmount"
-            :max="earnedAmount"
-            id="withdraw"
-            name="withdraw"
-            class="text-white p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-4/12"
-          />
+          <label class="w-fit" for="withdraw">WITHDRAW</label>
+          <div class="w-4/12">
+            <transition name="toast-input-info">
+              <span
+                v-if="amounttowithdrawInput"
+                class="text-xs absolute ml-2 bg-slate-500 rounded-md -mt-1 text-white font-sans px-1"
+                >*Withdraw</span
+              >
+            </transition>
+            <input
+              type="number"
+              min="50"
+              placeholder="50"
+              v-model="withdrawalAmount"
+              :max="earnedAmount"
+              id="withdraw"
+              name="withdraw"
+              class="text-white p-1 py-2 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-full"
+              @focus="show_input_info($event, 0, '', boolsArray)"
+              @focusout="show_input_info($event, 0, '50', boolsArray)"
+            />
+          </div>
         </div>
         <p
           class="flex flex-row text-red-700 border-b-2 border-sky-600"
@@ -326,7 +390,7 @@ function loadMessage() {
           {{ withdrawalResponse }}
         </p>
         <button
-          class="self-center bg-gradient-to-tr from-slate-600 to-green-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif"
+          class="self-center bg-gradient-to-tr from-slate-600 to-green-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif w-9/12 md:w-7/12"
           v-if="!initiatewithdraw"
           key="withdrawDisagree"
           @click="initiatewithdrawFunc"
@@ -334,7 +398,7 @@ function loadMessage() {
           WITHDRAWALS
         </button>
         <router-link
-          class="self-center bg-gradient-to-tr from-green-600 to-sky-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif disabled:opacity-30"
+          class="self-center bg-gradient-to-tr from-green-600 to-sky-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif w-9/12 md:w-7/12 disabled:opacity-30 place-content-center flex"
           v-if="useCounterStore().signedIn"
           to="referrals"
           key="referrals"
@@ -342,17 +406,17 @@ function loadMessage() {
           MY REFERRALS
         </router-link>
         <router-link
-          class="self-center bg-gradient-to-tr from-green-600 to-sky-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif disabled:opacity-30"
+          class="self-center bg-gradient-to-tr from-green-600 to-sky-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif w-9/12 md:w-7/12 disabled:opacity-30 place-content-center flex"
           v-if="useCounterStore().signedIn"
           to="investorPreviousActivities"
           key="investorPreviousActivities"
         >
-          PREVIOUS ACTIVITIES
+          RECENT ACTIVITIES
         </router-link>
         <router-link
           to="/topEarners"
           key="topEarners"
-          class="self-center bg-gradient-to-tr from-sky-600 to-green-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif"
+          class="self-center place-content-center flex bg-gradient-to-tr from-sky-600 to-green-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif w-9/12 md:w-7/12"
           >Top Earners</router-link
         >
         <font-awesome-icon
@@ -363,7 +427,7 @@ function loadMessage() {
           @pointerover="loadMessage"
         />
         <button
-          class="self-center bg-gradient-to-tr from-slate-600 to-green-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif disabled:opacity-30"
+          class="self-center bg-gradient-to-tr from-slate-600 to-green-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu text-white font-serif w-9/12 md:w-7/12 disabled:opacity-30 place-content-center flex"
           v-if="initiatewithdraw"
           key="initiatewithdraw"
           @click="processWithdrawFunc"
@@ -373,10 +437,11 @@ function loadMessage() {
         </button>
         <section
           class="flex flex-row border-t-2 border-red-600 pt-4"
-          key="deletePrompt"
           v-if="deletePrompt"
+          key="deletePrompt"
         >
           <form
+            id="deleteUserForm"
             ref="deleteForm"
             @submit.prevent=""
             class="self-center border-b-2 pb-4 border-red-600 space-y-8"
@@ -389,52 +454,114 @@ function loadMessage() {
               ><span class="text-red-600">Please fill the form below:</span>
             </p>
             <div class="flex flex-col space-y-2">
-              <label  class="w-fit" for="reasonForDelete">Why Do You Want To Leave?</label>
-              <textarea
-                id="reasonForDelete"
-                name="reason_for_delete"
-                rows="5"
-                required
-                placeholder="e.g. I've achieved my financial target"
-                class="text-white p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 md:w-9/12 bg-opacity-20"
-              ></textarea>
-              <label  class="w-fit" for="reviewCritic"
+              <label class="w-fit" for="reasonForDelete"
+                >Why Do You Want To Leave?</label
+              >
+              <div>
+                <transition name="toast-input-info">
+                  <span
+                    class="text-xs absolute ml-2 bg-black bg-opacity-80 rounded-md -mt-1 text-slate-300 font-sans px-1"
+                    v-if="reasonfordeleteInput"
+                    >*Reason for leaving</span
+                  >
+                </transition>
+                <textarea
+                  id="reasonForDelete"
+                  name="reason_for_delete"
+                  rows="5"
+                  required
+                  placeholder="e.g. I've achieved my financial target"
+                  class="text-white p-1 py-3 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 md:w-9/12 bg-opacity-20"
+                  @focus="show_input_info($event, 1, '', boolsArray)"
+                  @focusout="
+                    show_input_info(
+                      $event,
+                      1,
+                      'e.g. I\'ve achieved my financial target',
+                      boolsArray
+                    )
+                  "
+                ></textarea>
+              </div>
+              <label class="w-fit" for="reviewCritic"
                 >What's Your Experience at IfIHadInvested</label
               >
-              <textarea
-                id="reviewCritic"
-                name="review_critic"
-                required
-                rows="5"
-                placeholder="e.g. I had a lovely experience but you've got to upgrade your ..."
-                class="text-white p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 md:w-9/12 bg-opacity-20"
-              ></textarea>
-              <label  class="w-fit" for="deleteFullNames">Full Names</label>
-              <input
-                type="text"
-                id="deleteFullNames"
-                ref="deleteFullNamesRef"
-                required
-                placeholder="e.g. Eric Nyaga"
-                v-model="deleteFullNames"
-                class="text-white p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-6/12 bg-opacity-20"
-              />
+              <div>
+                <transition name="toast-input-info">
+                  <span
+                    v-if="reviewcriticInput"
+                    class="text-xs absolute ml-2 bg-black bg-opacity-80 rounded-md -mt-1 text-slate-300 font-sans px-1"
+                    >*Your review or critic</span
+                  >
+                </transition>
+                <textarea
+                  id="reviewCritic"
+                  name="review_critic"
+                  required
+                  rows="5"
+                  placeholder="e.g. I had a lovely experience but you've got to upgrade your ..."
+                  class="text-white p-1 py-3 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 md:w-9/12 bg-opacity-20"
+                  @focus="show_input_info($event, 2, '', boolsArray)"
+                  @focusout="
+                    show_input_info(
+                      $event,
+                      2,
+                      'e.g. I had a lovely experience but you\'ve got to upgrade your ...',
+                      boolsArray
+                    )
+                  "
+                ></textarea>
+              </div>
+              <label class="w-fit" for="deleteFullNames">Full Names</label>
+              <div>
+                <transition name="toast-input-info">
+                  <span
+                    v-if="fullnamesInput"
+                    class="text-xs absolute ml-2 bg-black bg-opacity-80 rounded-md -mt-1 text-slate-300 font-sans px-1"
+                    >*Your full names</span
+                  >
+                </transition>
+                <input
+                  type="text"
+                  id="deleteFullNames"
+                  ref="deleteFullNamesRef"
+                  required
+                  placeholder="e.g. Eric Nyaga"
+                  v-model="deleteFullNames"
+                  class="text-white p-1 py-3 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-6/12 bg-opacity-20"
+                  @focus="show_input_info($event, 3, '', boolsArray)"
+                  @focusout="
+                    show_input_info($event, 3, 'e.g. Eric Nyaga', boolsArray)
+                  "
+                />
+              </div>
               <input
                 type="text"
                 :value="investorDetails?.userName"
-                name="deleteUserName"
+                name="user_name"
                 class="hidden"
               />
-              <label  class="w-fit" for="password">Password</label>
-              <input
-                type="password"
-                v-model="password"
-                placeholder="password"
-                id="password"
-                required
-                name="password"
-                class="text-white p-1 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-4/12 bg-opacity-20"
-              />
+              <label class="w-fit" for="password">Password</label>
+              <div>
+                <transition name="toast-input-info">
+                  <span
+                    v-if="passwordInput"
+                    class="text-xs absolute ml-2 bg-black bg-opacity-80 rounded-md -mt-1 text-slate-300 font-sans px-1"
+                    >*password</span
+                  >
+                </transition>
+                <input
+                  type="password"
+                  v-model="password"
+                  placeholder="password"
+                  id="password"
+                  required
+                  name="password"
+                  class="text-white p-1 py-3 bg-slate-500 border shadow-sm border-sky-600 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-4/12 bg-opacity-20"
+                  @focus="show_input_info($event, 4, '', boolsArray)"
+                  @focusout="show_input_info($event, 4, 'password', boolsArray)"
+                />
+              </div>
             </div>
             <transition name="toast">
               <p v-if="invalid" class="text-red-600 self-center text-sm">
@@ -450,12 +577,145 @@ function loadMessage() {
             />
           </button>
         </section>
+        <section
+          class="flex flex-row border-t-2 pt-4 border-red-600 justify-between"
+          v-if="update_prompt"
+          key="update_prompt"
+        >
+          <form
+            @submit.prevent=""
+            ref="update_form"
+            class="flex flex-col space-y-1 text-sm md:text-lg border-b-2 pb-4 border-red-600"
+          >
+            <h3
+              class="self-center text-2xl text-orange-600 pb-2 underline underline-offset-4 decoration-red-600"
+            >
+              Type in your NEW Details
+            </h3>
+            <div class="flex flex-row justify-between">
+              <label
+                for="firstName"
+                class="flex-1 text-sm md:text-lg pr-1 flex place-items-center"
+                >FIRST NAME</label
+              >
+              <div>
+                <transition name="toast-input-info">
+                  <span
+                    v-if="firstnameInput"
+                    class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+                    >*registered first name</span
+                  >
+                </transition>
+                <input
+                  class="text-black p-1 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
+                  type="text"
+                  required
+                  :value="investorDetails?.firstName"
+                  id="firstName"
+                  name="first_name"
+                  @focus="show_input_info($event, 5, '', boolsArray)"
+                  @focusout="
+                    show_input_info(
+                      $event,
+                      5,
+                      'registered first name',
+                      boolsArray
+                    )
+                  "
+                />
+              </div>
+            </div>
+            <div class="flex flex-row justify-between">
+              <label
+                for="lastName"
+                class="flex-1 text-sm md:text-lg pr-1 flex place-items-center"
+                >LAST NAME</label
+              >
+              <div>
+                <transition name="toast-input-info">
+                  <span
+                    v-if="lastnameInput"
+                    class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+                    >*registered last name</span
+                  >
+                </transition>
+                <input
+                  class="text-black p-1 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
+                  type="text"
+                  required
+                  :value="investorDetails?.lastName"
+                  id="lastName"
+                  name="last_name"
+                  @focus="show_input_info($event, 6, '', boolsArray)"
+                  @focusout="
+                    show_input_info(
+                      $event,
+                      6,
+                      'registered last name',
+                      boolsArray
+                    )
+                  "
+                />
+              </div>
+            </div>
+            <div class="flex flex-row justify-between">
+              <label
+                for="email"
+                class="flex-1 text-sm md:text-lg pr-1 flex place-items-center"
+                >EMAIL</label
+              >
+              <div>
+                <transition name="toast-input-info">
+                  <span
+                    v-if="emailInput"
+                    class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+                    >*registered GMAIL</span
+                  >
+                </transition>
+                <input
+                  class="text-black p-1 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
+                  type="email"
+                  required
+                  :value="investorDetails?.email"
+                  id="email"
+                  name="email"
+                  @focus="show_input_info($event, 7, '', boolsArray)"
+                  @focusout="
+                    show_input_info($event, 7, 'registered GMAIL', boolsArray)
+                  "
+                />
+              </div>
+              <input
+                type="text"
+                name="userName"
+                :value="investorDetails?.userName"
+                class="hidden"
+              />
+            </div>
+          </form>
+          <button class="self-start">
+            <font-awesome-icon
+              icon="fa-solid fa-window-close"
+              @click="close_update_prompt"
+              class="text-red-700 h-9"
+            />
+          </button>
+        </section>
       </transition-group>
     </form>
     <button
       v-if="useCounterStore().signedIn"
+      ref="updateAccountRef"
+      class="text-white self-center bg-gradient-to-tr from-sky-600 to-orange-600 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu font-serif my-2 disabled:opacity-20"
+      key="updateAccount"
+      @click="updateAccount"
+    >
+      UPDATE ACCOUNT
+    </button>
+    <button
+      v-if="useCounterStore().signedIn"
       ref="deleteAccountRef"
-      class="text-orange-200 self-center bg-gradient-to-tr from-green-600 to-red-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu font-serif my-2 disabled:opacity-40"
+      class="text-orange-200 self-center bg-gradient-to-tr from-green-600 to-red-900 font-black rounded-lg p-2 hover:translate-y-1 hover:shadow-md duration-1000 hover:drop-shadow-xl hover:shadow-slate-700 transition-all transform-cpu font-serif my-2 disabled:opacity-20"
       key="deleteAccount"
       @click="deleteAccount"
     >

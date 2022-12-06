@@ -16,6 +16,7 @@ export const useCounterStore = defineStore("counter", () => {
 
   const signedIn = ref(false);
   const userName = ref("");
+  const paid = ref(false);
 
   return {
     stockList,
@@ -30,5 +31,6 @@ export const useCounterStore = defineStore("counter", () => {
     footerPosition,
     signedIn,
     userName,
+    paid,
   };
 });

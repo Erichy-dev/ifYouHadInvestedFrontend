@@ -28,8 +28,12 @@ import {
   faWindowClose,
   faCaretDown,
   faCaretUp,
+  faBell,
+  faMoneyBill1Wave,
+  faUserFriends,
+  faSackDollar,
 } from "@fortawesome/free-solid-svg-icons";
-import { faGoogle, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faGoogle, faTwitter, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 /* add icons to the library */
 library.add(
@@ -48,7 +52,12 @@ library.add(
   faBars,
   faCaretDown,
   faCaretUp,
-  faWindowClose
+  faWindowClose,
+  faBell,
+  faMoneyBill1Wave,
+  faUserFriends,
+  faSackDollar,
+  faWhatsapp
 );
 
 const app = createApp(App);

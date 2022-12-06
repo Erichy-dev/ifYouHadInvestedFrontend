@@ -20,9 +20,10 @@ function signIn() {
     data: new FormData(form.value as HTMLFormElement),
   })
     .then((res) => {
-      if (res.data === "valid") {
+      if (res.data !== "None") {
         useCounterStore().userName = userName.value;
         useCounterStore().signedIn = true;
+        useCounterStore().paid = res.data.paid;
         navigate.push("/associate");
       } else {
         invalid.value = true;
@@ -34,6 +35,27 @@ function signIn() {
     .catch((err) => {
       console.log(err.message);
     });
+}
+
+const usernameInput = ref(false);
+const passwordInput = ref(false);
+const boolsArray: Ref<boolean>[] = [usernameInput, passwordInput];
+
+function forgotPassword() {
+  //
+}
+
+//setup function ends here
+</script>
+<script lang="ts">
+export function show_input_info(
+  ev: Event,
+  toastVal: number,
+  placeholder: string,
+  boolsArray: Ref<boolean>[]
+) {
+  (ev.currentTarget as HTMLInputElement).placeholder = placeholder;
+  boolsArray[toastVal].value = !boolsArray[toastVal].value;
 }
 </script>
 
@@ -57,27 +79,49 @@ function signIn() {
       </h2>
       <div class="flex flex-row justify-between">
         <label for="userName" class="flex-1">User Name</label>
-        <input
-          type="text"
-          required
-          name="userName"
-          id="userName"
-          placeholder="your team name"
-          class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
-          v-model="userName"
-        />
+        <div>
+          <transition name="toast-input-info">
+            <span
+              v-if="usernameInput"
+              class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+              >*your user_name</span
+            >
+          </transition>
+          <input
+            type="text"
+            required
+            name="userName"
+            @focus="show_input_info($event, 0, '', boolsArray)"
+            @focusout="show_input_info($event, 0, 'your user_name', boolsArray)"
+            id="userName"
+            placeholder="your user_name"
+            class="p-1 py-3 placeholder-slate-400 focus:outline-none focus:border-green-500 text-black bg-white border shadow-sm border-slate-300 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
+            v-model="userName"
+          />
+        </div>
       </div>
       <div class="flex flex-row justify-between">
         <label for="password" class="flex-1">Password</label>
-        <input
-          type="password"
-          required
-          name="password"
-          id="password"
-          placeholder="password"
-          class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
-          v-model="password"
-        />
+        <div>
+          <transition name="toast-input-info">
+            <span
+              class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+              v-if="passwordInput"
+              >*password</span
+            >
+          </transition>
+          <input
+            type="password"
+            required
+            name="password"
+            @focus="show_input_info($event, 1, '', boolsArray)"
+            @focusout="show_input_info($event, 1, 'password', boolsArray)"
+            id="password"
+            placeholder="password"
+            class="text-black p-1 py-3 bg-white border shadow-sm placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
+            v-model="password"
+          />
+        </div>
       </div>
       <div class="self-center flex flex-col space-y-3">
         <input
@@ -85,9 +129,11 @@ function signIn() {
           value="Submit"
           class="bg-sky-900 p-2 rounded-xl md:text-xl w-fit"
         />
-        <!-- <span @click="forgotPassword" class="hover:text-red-300 w-fit"
-              >forgot password?</span
-            > -->
+        <!-- <span
+          @click="forgotPassword"
+          class="hover:text-red-900 text-red-300 w-fit"
+          >forgot password?</span
+        > -->
         <router-link to="/signUp">
           <button
             class="bg-sky-900 p-2 mb-3 rounded-xl md:text-xl w-fit self-center"
@@ -110,3 +156,16 @@ function signIn() {
     </form>
   </main>
 </template>
+
+<style>
+.toast-input-info-move,
+.toast-input-info-enter-active,
+.toast-input-info-leave-active {
+  transition: all 1s ease-in-out;
+}
+.toast-input-info-leave-to,
+.toast-input-info-enter-from {
+  opacity: 0;
+  transform: translateY(5px) scale(1.3);
+}
+</style>

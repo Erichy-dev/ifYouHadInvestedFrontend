@@ -11,6 +11,7 @@ import ResultsViewVue from "@/views/ResultsView.vue";
 import TermsAndConditionsVue from "@/views/TermsAndConditions.vue";
 import RecentActivitiesVue from "@/views/RecentActivities.vue";
 import ReferralsViewVue from "@/views/ReferralsView.vue";
+import ConfirmPaymentVue from "@/views/ConfirmPayment.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +35,11 @@ const router = createRouter({
       path: "/IIIAffiliate",
       name: "IIIAffiliate",
       component: IIIAffiliate,
+    },
+    {
+      path: "/confirmRegistration",
+      name: "confirmRegistration",
+      component: ConfirmPaymentVue,
     },
     {
       path: "/signIn",

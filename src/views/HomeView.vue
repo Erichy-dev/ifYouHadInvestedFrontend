@@ -6,6 +6,7 @@ import axios from "axios";
 import { useCounterStore } from "@/stores/counter";
 import ToastFormError from "@/components/ToastFormError.vue";
 // import { STOCKS, STOCKLength } from "@/stocks";
+import { show_input_info } from "./SignIn.vue";
 
 document.title = "If I Had Invested - Eric Nyaga";
 
@@ -210,6 +211,11 @@ function removeOpacity(idToRemove: string) {
   const buttonElement = document.getElementById(idToRemove);
   buttonElement?.classList.remove("opacity-50");
 }
+
+const amounttoinvestInput = ref(false);
+const stocklistInput = ref(false);
+const dateofstockInput = ref(false);
+const boolsArray = [amounttoinvestInput, stocklistInput, dateofstockInput];
 </script>
 
 <template>
@@ -233,21 +239,34 @@ function removeOpacity(idToRemove: string) {
           id="form"
         >
           <div class="flex flex-col">
-            <label for="amount">
+            <label for="amount" class="w-fit">
               <font-awesome-icon icon="fa-solid fa-dollar-sign" class="h-5" />
             </label>
-            <input
-              class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
-              id="amount"
-              name="amount"
-              type="number"
-              required
-              placeholder="Amount To Invest"
-              v-model="userAmount"
-            />
+            <div>
+              <transition name="toast-input-info">
+                <span
+                  v-if="amounttoinvestInput"
+                  class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+                  >*Amount To Invest</span
+                >
+              </transition>
+              <input
+                class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-full py-3"
+                id="amount"
+                name="amount"
+                type="number"
+                required
+                placeholder="Amount To Invest"
+                v-model="userAmount"
+                @focus="show_input_info($event, 0, '', boolsArray)"
+                @focusout="
+                  show_input_info($event, 0, 'Amount To Invest', boolsArray)
+                "
+              />
+            </div>
           </div>
           <div class="flex flex-col">
-            <label for="stock" class="overflow-x-visible">in </label>
+            <label for="stock" class="w-fit overflow-x-visible">in </label>
             <div class="flex flex-row space-x-3 pb-2">
               <button
                 @click="moreStocks"
@@ -264,34 +283,56 @@ function removeOpacity(idToRemove: string) {
                 LESS STOCKS
               </button>
             </div>
-            <select
-              class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-full text-xs"
-              id="stock"
-              name="stock"
-            >
-              <option
-                v-for="stock in stockList"
-                :key="stock[0]"
-                :value="stock[0]"
-              >
-                <span v-if="stock[1] == ''">{{ stock[0] }}</span>
-                <span v-else
-                  >{{ stock[1].substring(0, optionsTextTrimLength) }} -
-                  {{ stock[0] }}</span
+            <div>
+              <transition name="toast-input-info">
+                <span
+                  v-if="stocklistInput"
+                  class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+                  >*Pile of Stocks</span
                 >
-              </option>
-            </select>
+              </transition>
+              <select
+                class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-full py-3 text-xs"
+                id="stock"
+                name="stock"
+                @focus="show_input_info($event, 1, '', boolsArray)"
+                @focusout="show_input_info($event, 1, '', boolsArray)"
+              >
+                <option
+                  v-for="stock in stockList"
+                  :key="stock[0]"
+                  :value="stock[0]"
+                >
+                  <span v-if="stock[1] == ''">{{ stock[0] }}</span>
+                  <span v-else
+                    >{{ stock[1].substring(0, optionsTextTrimLength) }} -
+                    {{ stock[0] }}</span
+                  >
+                </option>
+              </select>
+            </div>
           </div>
           <div class="flex flex-col">
-            <label for="dateOfStock">On</label>
-            <input
-              class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
-              type="date"
-              id="dateOfStock"
-              name="dateSelected"
-              required
-              v-model="userDate"
-            />
+            <label for="dateOfStock" class="w-fit">On</label>
+            <div>
+              <transition name="toast-input-info">
+                <span
+                  v-if="dateofstockInput"
+                  class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+                  >*Date of Investment</span
+                >
+              </transition>
+              <input
+                class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-full py-3"
+                type="date"
+                id="dateOfStock"
+                name="dateSelected"
+                required
+                v-model="userDate"
+                @focus="show_input_info($event, 2, '', boolsArray)"
+                @focusout="show_input_info($event, 2, '', boolsArray)"
+              />
+            </div>
           </div>
           <button
             class="bg-gradient-to-tr from-slate-600 to-green-900 rounded-lg py-2 hover:-rotate-2 transition-all duration-1000"

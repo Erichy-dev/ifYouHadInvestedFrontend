@@ -109,7 +109,7 @@ function hideDetails() {
         v-show="toggleNavIf"
       >
         <router-link
-          class="flex-1 lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 hover:translate-y-2 hover:rotate-6 transition-all duration-1000 flex place-content-center"
+          class="flex-1 lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 hover:translate-y-2 hover:rotate-6 transition-all duration-1000 flex place-items-center place-content-center"
           @mousemove="showDetails"
           @mouseout="hideDetails"
           to="/"
@@ -117,7 +117,7 @@ function hideDetails() {
           HOME
         </router-link>
         <router-link
-          class="flex-1 lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 hover:translate-y-2 hover:rotate-6 transition-all duration-1000 flex place-content-center"
+          class="flex-1 lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 hover:translate-y-2 hover:rotate-6 transition-all duration-1000 flex place-items-center place-content-center"
           @mousemove="showDetails"
           @mouseout="hideDetails"
           to="/top10ReasonsToInvest"
@@ -125,7 +125,7 @@ function hideDetails() {
           BLOG
         </router-link>
         <router-link
-          class="flex-1 lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 hover:translate-y-2 hover:rotate-6 transition-all duration-1000 flex place-content-center"
+          class="flex-1 lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 hover:translate-y-2 hover:rotate-6 transition-all duration-1000 flex place-items-center place-content-center"
           @mousemove="showDetails"
           @mouseout="hideDetails"
           to="/IIIAffiliate"
@@ -133,7 +133,7 @@ function hideDetails() {
           AFFILIATE
         </router-link>
         <router-link
-          class="flex-1 lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 hover:translate-y-2 hover:rotate-6 transition-all duration-1000 flex place-content-center"
+          class="flex-1 lg:px-6 font-bold bg-gradient-to-tr from-slate-600 to-green-900 rounded-xl p-2 hover:translate-y-2 hover:rotate-6 transition-all duration-1000 flex place-items-center place-content-center"
           @mousemove="showDetails"
           @mouseout="hideDetails"
           to="/affiliateTerms"
@@ -142,13 +142,13 @@ function hideDetails() {
         </router-link>
         <transition name="toastNav" appear>
           <router-link
-            to="/associate"
             v-if="signedIn"
+            to="/associate"
             class="mr-1 flex flex-col"
           >
             <font-awesome-icon
               icon="fa-solid fa-user"
-              class="h-10 text-sky-700"
+              class="h-5 text-sky-700"
             />
             <p class="text-sm text-orange-600 font-black">
               {{ useCounterStore().userName.substring(0, 5) + ".." }}
@@ -160,7 +160,7 @@ function hideDetails() {
     <div
       v-show="showInfo"
       ref="showInfoRef"
-      class="text-black font-bold bg-gradient-to-tr from-orange-600 via-sky-600 to-green-600 font-serif rounded-xl p-2 text-sm fixed z-50 w-36 overflow-auto"
+      class="text-black font-bold bg-gradient-to-tr from-orange-600 via-sky-600 to-green-600 font-serif rounded-xl p-2 text-sm fixed z-50 w-36 overflow-auto hidden md:flex"
     >
       <p>{{ showInfoMessage }}</p>
     </div>

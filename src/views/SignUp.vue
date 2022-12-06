@@ -6,6 +6,8 @@ import axios from "axios";
 import { useCounterStore } from "../stores/counter";
 import { useRouter } from "vue-router";
 
+import { show_input_info } from "./SignIn.vue";
+
 document.title = "IfIHadInvested Investor Sign Up";
 
 const userName = ref("");
@@ -40,7 +42,7 @@ function createProfile() {
         if (res.data === "valid") {
           useCounterStore().userName = userName.value;
           useCounterStore().signedIn = true;
-          navigator.push("/associate");
+          navigator.push("/IIIAffiliate");
         } else {
           invalidInput.value =
             "These fields already exist:::" + Object.keys(res.data).join(",");
@@ -64,6 +66,25 @@ watch(password2, () => {
     password2Ref as Ref<HTMLInputElement>
   );
 });
+
+const usernameInput = ref(false);
+const firstnameInput = ref(false);
+const lastnameInput = ref(false);
+const emailInput = ref(false);
+const phonenumberInput = ref(false);
+const affiliateamountInput = ref(false);
+const passwordInput = ref(false);
+const password2Input = ref(false);
+const boolsArray = [
+  usernameInput,
+  firstnameInput,
+  lastnameInput,
+  emailInput,
+  phonenumberInput,
+  affiliateamountInput,
+  passwordInput,
+  password2Input,
+];
 </script>
 
 <script lang="ts">
@@ -112,6 +133,12 @@ export function dynamicInputError(
       >
         CREATE ACCOUNT
       </h2>
+      <strong class="text-red-700 self-center underline-offset-4 pb-5"
+        >Kindly first read the
+        <router-link to="/affiliateTerms" class="underline hover:text-white"
+          >Terms and Conditions</router-link
+        ></strong
+      >
       <!-- <div class="w-6/12 self-center">
           <img
             src="/DLS.jpg"
@@ -127,86 +154,159 @@ export function dynamicInputError(
         <label for="userName" class="flex-1 text-sm md:text-lg"
           >USER NAME <span class="text-red-800">*</span></label
         >
-        <input
-          class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
-          type="text"
-          v-model="userName"
-          required
-          placeholder="your user name"
-          id="userName"
-          name="userName"
-        />
+        <div>
+          <transition name="toast-input-info">
+            <span
+              v-if="usernameInput"
+              class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+              >*your user name</span
+            >
+          </transition>
+          <input
+            class="text-black p-1 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
+            type="text"
+            v-model="userName"
+            required
+            placeholder="your user name"
+            id="userName"
+            name="userName"
+            @focus="show_input_info($event, 0, '', boolsArray)"
+            @focusout="show_input_info($event, 0, 'your user name', boolsArray)"
+          />
+        </div>
       </div>
       <div class="flex flex-row justify-between">
         <label for="firstName" class="flex-1 text-sm md:text-lg"
           >FIRST NAME <span class="text-red-800">*</span></label
         >
-        <input
-          class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
-          type="text"
-          required
-          placeholder="registered first name"
-          id="firstName"
-          name="firstName"
-        />
+        <div>
+          <transition name="toast-input-info">
+            <span
+              v-if="firstnameInput"
+              class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+              >*registered first name</span
+            >
+          </transition>
+          <input
+            class="text-black p-1 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
+            type="text"
+            required
+            placeholder="registered first name"
+            id="firstName"
+            name="firstName"
+            @focus="show_input_info($event, 1, '', boolsArray)"
+            @focusout="
+              show_input_info($event, 1, 'registered first name', boolsArray)
+            "
+          />
+        </div>
       </div>
       <div class="flex flex-row justify-between">
         <label for="lastName" class="flex-1 text-sm md:text-lg"
           >LAST NAME <span class="text-red-800">*</span></label
         >
-        <input
-          class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
-          type="text"
-          required
-          placeholder="registered last name"
-          id="lastName"
-          name="lastName"
-        />
+        <div>
+          <transition name="toast-input-info">
+            <span
+              v-if="lastnameInput"
+              class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+              >*registered last name</span
+            >
+          </transition>
+          <input
+            class="text-black p-1 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
+            type="text"
+            required
+            placeholder="registered last name"
+            id="lastName"
+            name="lastName"
+            @focus="show_input_info($event, 2, '', boolsArray)"
+            @focusout="
+              show_input_info($event, 2, 'registered last name', boolsArray)
+            "
+          />
+        </div>
       </div>
       <div class="flex flex-row justify-between">
         <label for="email" class="flex-1 text-sm md:text-lg"
           >EMAIL <span class="text-red-800">*</span></label
         >
-        <input
-          class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
-          type="email"
-          required
-          placeholder="registered GMAIL"
-          v-model="email"
-          id="email"
-          name="email"
-        />
+        <div>
+          <transition name="toast-input-info">
+            <span
+              v-if="emailInput"
+              class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+              >*registered GMAIL</span
+            >
+          </transition>
+          <input
+            class="text-black p-1 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
+            type="email"
+            required
+            placeholder="registered GMAIL"
+            v-model="email"
+            id="email"
+            name="email"
+            @focus="show_input_info($event, 3, '', boolsArray)"
+            @focusout="
+              show_input_info($event, 3, 'registered GMAIL', boolsArray)
+            "
+          />
+        </div>
       </div>
       <div class="flex flex-row justify-between">
         <label for="phoneNumber" class="flex-1 text-sm md:text-lg"
           >PHONE NUMBER <span class="text-red-800">*</span></label
         >
-        <input
-          class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
-          type="tel"
-          required
-          placeholder="registered phone number"
-          id="phoneNumber"
-          name="phoneNumber"
-        />
+        <div>
+          <transition name="toast-input-info">
+            <span
+              v-if="phonenumberInput"
+              class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+              >*registered phone number</span
+            >
+          </transition>
+          <input
+            class="text-black p-1 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
+            type="tel"
+            required
+            placeholder="registered phone number"
+            id="phoneNumber"
+            name="phoneNumber"
+            @focus="show_input_info($event, 4, '', boolsArray)"
+            @focusout="
+              show_input_info($event, 4, 'registered phone number', boolsArray)
+            "
+          />
+        </div>
       </div>
       <div class="flex flex-row justify-between">
         <label for="affiliateAmount" class="flex-1 text-sm md:text-lg"
           >AFFILIATE AMOUNT</label
         >
-        <input
-          class="text-black p-1 border-slate-300 rounded-md bg-slate-300"
-          type="number"
-          disabled
-          value="50"
-          placeholder="registered phone number"
-          id="affiliateAmount"
-        />
+        <div>
+          <transition name="toast-input-info">
+            <span
+              v-if="affiliateamountInput"
+              class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+              >*affiliate amount</span
+            >
+          </transition>
+          <input
+            class="text-black p-1 border-slate-300 rounded-md bg-slate-300"
+            type="number"
+            disabled
+            value="50"
+            id="affiliateAmount"
+            @focus="show_input_info($event, 5, '', boolsArray)"
+            @focusout="show_input_info($event, 5, '', boolsArray)"
+          />
+        </div>
         <!-- <select
           name="referral_amount"
           id="referral_amount"
           required
-          class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
+          class="text-black p-1 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
         >
           <option value="50" selected>50</option>
           <option value="100">100</option>
@@ -217,32 +317,58 @@ export function dynamicInputError(
       </div>
       <div class="flex flex-row justify-between">
         <label for="password1" class="flex-1 text-sm md:text-lg"
-          >Password <span class="text-red-800">*</span></label
+          >PASSWORD <span class="text-red-800">*</span></label
         >
-        <input
-          class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
-          type="password"
-          v-model="password1"
-          required
-          placeholder="a strong password"
-          id="password1"
-          name="password1"
-        />
+        <div>
+          <transition name="toast-input-info">
+            <span
+              v-if="passwordInput"
+              class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+              >*a strong password</span
+            >
+          </transition>
+          <input
+            class="text-black p-1 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
+            type="password"
+            v-model="password1"
+            required
+            placeholder="a strong password"
+            id="password1"
+            name="password1"
+            @focus="show_input_info($event, 6, '', boolsArray)"
+            @focusout="
+              show_input_info($event, 6, 'a strong password', boolsArray)
+            "
+          />
+        </div>
       </div>
       <div class="flex flex-row justify-between">
         <label for="password2" class="flex-1 text-sm md:text-lg"
-          >Password Confirmation <span class="text-red-800">*</span></label
+          >PASSWORD CONFIRMATION<span class="text-red-800">*</span></label
         >
-        <input
-          class="text-black p-1 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
-          type="password"
-          v-model="password2"
-          ref="password2Ref"
-          required
-          placeholder="repeat password"
-          id="password2"
-          name="password2"
-        />
+        <div>
+          <transition name="toast-input-info">
+            <span
+              v-if="password2Input"
+              class="text-xs absolute ml-2 bg-white rounded-md -mt-1 text-slate-500 font-sans px-1"
+              >*repeat password</span
+            >
+          </transition>
+          <input
+            class="text-black p-1 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
+            type="password"
+            v-model="password2"
+            ref="password2Ref"
+            required
+            placeholder="repeat password"
+            id="password2"
+            name="password2"
+            @focus="show_input_info($event, 7, '', boolsArray)"
+            @focusout="
+              show_input_info($event, 7, 'repeat password', boolsArray)
+            "
+          />
+        </div>
       </div>
       <transition name="toast">
         <p v-if="invalid" class="text-red-600 self-center text-sm">

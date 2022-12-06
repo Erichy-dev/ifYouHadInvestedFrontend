@@ -20,7 +20,7 @@ const formInvalid = ref(true);
  * - toggles errors in the home page form.
  * @param err - string error to be displayed
  */
- function toggleFormError(err: string) {
+function toggleFormError(err: string) {
   formError.value = err;
   formInvalid.value = true;
   setTimeout(() => {
@@ -70,7 +70,11 @@ axios({
         <p>{{ new Date(task.fields.date_added).toLocaleString() }}</p>
         <p class="text-orange-600">Referred {{ task.fields.referral }}</p>
       </div>
-      <ToastFormError :form-error="formError" :form-invalid="formInvalid" :text-size="textSize" />
+      <ToastFormError
+        :form-error="formError"
+        :form-invalid="formInvalid"
+        :text-size="textSize"
+      />
     </form>
   </main>
 </template>

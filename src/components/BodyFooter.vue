@@ -12,17 +12,24 @@ onMounted(() => {
     class="border-t-2 border-slate-600 flex flex-col place-items-center py-4 italic text-sm px-2"
     id="footer"
   >
-    <form @submit.prevent="" class="flex flex-row space-x-2">
-      <a href="mailto:erichnyaga1@gmail.com">
+    <form @submit.prevent="" class="flex flex-row space-x-2 text-orange-600">
+      <strong>CONTACT US </strong>
+      <a href="mailto:ifihadinvested12@gmail.com">
         <font-awesome-icon
           icon="fa-solid fa-envelope"
-          class="h-5 hover:text-green-600 text-orange-600"
+          class="h-5 hover:text-green-600"
+        />
+      </a>
+      <a class="flex-1" href="https://wa.me/+254758287757">
+        <font-awesome-icon
+          icon="fa-brands fa-whatsapp"
+          class="h-5 hover:text-green-600"
         />
       </a>
       <a href="https://twitter.com/riki_dev_">
         <font-awesome-icon
           icon="fa-brands fa-twitter"
-          class="h-5 hover:text-green-600 text-orange-600"
+          class="h-5 hover:text-green-600"
         />
       </a>
     </form>
