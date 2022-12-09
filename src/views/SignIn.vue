@@ -6,6 +6,8 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import { useCounterStore } from "../stores/counter";
 
+document.title = "Sign in Investor";
+
 const form: Ref<HTMLFormElement | null> = ref(null);
 const userName = ref("");
 const password = ref("");

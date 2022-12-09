@@ -8,6 +8,8 @@ import { useRouter } from "vue-router";
 import { dynamicInputError } from "./SignUp.vue";
 import { show_input_info } from "./SignIn.vue";
 
+document.title = "Investor Details";
+
 /**Time to sue when determining whether its morning, afternoon or evening */
 const currentTime: number = new Date().getHours();
 const greetings = ref("");
@@ -189,6 +191,10 @@ function deletePromptFunc(bool1: boolean, bool2: boolean) {
 function deleteAccount() {
   if (deletePrompt.value) {
     const deleteFormData = new FormData(deleteForm.value as HTMLFormElement);
+    deleteFormData.append(
+      "email",
+      (investorDetails.value as investorSchema).email
+    );
     axios({
       method: "post",
       url: "associates/deleteAccount",

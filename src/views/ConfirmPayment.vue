@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
+document.title = "Confirm Payment";
+
 function confirmRegistration() {
   //
 }

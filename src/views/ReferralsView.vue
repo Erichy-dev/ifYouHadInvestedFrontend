@@ -5,6 +5,8 @@ import axios from "axios";
 import { useCounterStore } from "../stores/counter";
 import ToastFormError from "@/components/ToastFormError.vue";
 
+document.title = "Investor's Refferals";
+
 type referralsSchema = {
   fields: {
     referral: string;
@@ -14,8 +16,8 @@ type referralsSchema = {
 const referrals: Ref<referralsSchema[]> = ref([]);
 const textSize = ref("text-4xl");
 
-const formError = ref("Hello there");
-const formInvalid = ref(true);
+const formError = ref("");
+const formInvalid = ref(false);
 /**
  * - toggles errors in the home page form.
  * @param err - string error to be displayed

@@ -4,11 +4,11 @@ import type { Ref } from "vue";
 import GoogleRecaptcha from "../components/GoogleRecaptcha.vue";
 import axios from "axios";
 import { useCounterStore } from "../stores/counter";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import { show_input_info } from "./SignIn.vue";
 
-document.title = "IfIHadInvested Investor Sign Up";
+document.title = "Investor Sign Up";
 
 const userName = ref("");
 const email = ref("");
@@ -18,6 +18,9 @@ const invalid = ref(false);
 const invalidInput = ref("");
 const form: Ref<HTMLFormElement | null> = ref(null);
 const navigator = useRouter();
+const navigate = useRoute();
+
+const associate_link = navigate.query.a_link;
 
 function createProfile() {
   if (password1.value !== password2.value) {
@@ -33,10 +36,12 @@ function createProfile() {
       invalid.value = false;
     }, 5000);
   } else {
+    const fm_data = new FormData(form.value as HTMLFormElement);
+    if (associate_link) fm_data.append("a_link", associate_link as string);
     axios({
       method: "post",
       url: "associates/signUp",
-      data: new FormData(form.value as HTMLFormElement),
+      data: fm_data,
     })
       .then((res) => {
         if (res.data === "valid") {
@@ -281,10 +286,10 @@ export function dynamicInputError(
         </div>
       </div>
       <div class="flex flex-row justify-between">
-        <label for="affiliateAmount" class="text-sm md:text-lg w-fit"
+        <label for="affiliateAmount" class="text-sm md:text-lg flex-1"
           >AFFILIATE AMOUNT <span class="text-red-800">*</span></label
         >
-        <div>
+        <div class="flex-1">
           <transition name="toast-input-info">
             <span
               v-if="affiliateamountInput"
@@ -296,7 +301,7 @@ export function dynamicInputError(
             name="referral_amount"
             id="affiliateAmount"
             required
-            class="text-black p-1 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1"
+            class="text-black p-1 py-3 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 rounded-md focus:ring-1 w-full"
             @focus="show_input_info($event, 5, '', boolsArray)"
             @focusout="show_input_info($event, 5, '', boolsArray)"
           >

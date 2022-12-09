@@ -4,7 +4,7 @@ import { ref, computed } from "vue";
 import type { Ref } from "vue";
 import axios from "axios";
 
-document.title = "Results for my Stock Investments - Eric Nyaga";
+document.title = "Results for my Stock Investments";
 
 const date = ref(new Date());
 date.value.setFullYear(date.value.getFullYear() - 1);

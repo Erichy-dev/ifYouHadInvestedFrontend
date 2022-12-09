@@ -19,7 +19,7 @@ import DisclaimerVue from "@/components/ReasonsToInvest/DisclaimerVue.vue";
 import ScrollArticle from "@/components/ScrollArticle.vue";
 
 document.title =
-  "Top 10 Reasons You Should Invest in The Stock Market 2022 And The Risks Involved - Eric Nyaga";
+  "Top 10 Reasons You Should Invest in The Stock Market 2022 And The Risks Involved";
 </script>
 
 <template>

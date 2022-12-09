@@ -3,11 +3,15 @@ import axios from "axios";
 import { ref } from "vue";
 import type { Ref } from "vue";
 
+document.title = "IfIHadInvested Affiliate Program Top Earners";
+
 const dateToday = ref(new Date().toLocaleString());
 
 type TopEarnersSchema = {
-  fullNames: string;
-  earned: number;
+  fields: {
+    user: string;
+    earned: number;
+  }
 };
 const topEarners: Ref<TopEarnersSchema[]> = ref([]);
 
@@ -47,10 +51,10 @@ axios({
       <div
         class="flex flex-row justify-between border-b-2 border-sky-600"
         v-for="topEarner in topEarners"
-        :key="topEarner.fullNames"
+        :key="topEarner.fields.user"
       >
-        <h3>{{ topEarner.fullNames }}</h3>
-        <h3>{{ topEarner.earned }}</h3>
+        <h3>{{ topEarner.fields.user }}</h3>
+        <h3>{{ topEarner.fields.earned }}</h3>
       </div>
     </form>
   </main>

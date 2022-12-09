@@ -4,6 +4,8 @@ import type { Ref } from "vue";
 import { useCounterStore } from "@/stores/counter";
 import axios from "axios";
 
+document.title = "Investor's Recent Activities";
+
 type recentActivitiesSchema = {
   fields: {
     activity: string;

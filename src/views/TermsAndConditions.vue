@@ -2,6 +2,8 @@
 import { ref } from "vue";
 import { show_input_info } from "./SignIn.vue";
 
+document.title = "IfIHadInvested Affiliate Program Terms and Conditions";
+
 const affiliate_amount = ref(0);
 const number_of_referrals = ref(0);
 
@@ -103,7 +105,7 @@ setInterval(() => {
             class="border w-5/12 self-center rounded-lg"
           />
           <form @submi.prevent="" class="flex flex-col w-5/12">
-            <h3 class="text-4xl text-sky-400">Try It Out</h3>
+            <h3 class="text-3xl md:text-4xl text-sky-400">Try It Out</h3>
             <label for="affiliate_amount" class="w-fit">Affiliate Amount</label>
             <div class="flex flex-row">
               <transition name="toast-input-info">
@@ -122,7 +124,7 @@ setInterval(() => {
                 @focus="show_input_info($event, 0, '', boolsArray)"
                 @focusout="show_input_info($event, 0, '', boolsArray)"
                 id="affiliate_amount"
-                class="w-7/12 rounded-lg text-black p-1 pl-8 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 focus:ring-1"
+                class="md:w-7/12 rounded-lg text-black p-1 pl-8 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 focus:ring-1"
                 v-model="affiliate_amount"
               />
             </div>
@@ -147,7 +149,7 @@ setInterval(() => {
                 @focus="show_input_info($event, 1, '', boolsArray)"
                 @focusout="show_input_info($event, 1, '', boolsArray)"
                 id="number_of_referrals"
-                class="w-7/12 rounded-lg text-black p-1 pl-8 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 focus:ring-1"
+                class="md:w-7/12 rounded-lg text-black p-1 pl-8 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 focus:ring-1"
                 v-model="number_of_referrals"
               />
             </div>
@@ -174,7 +176,7 @@ setInterval(() => {
                   0.7 * affiliate_amount * number_of_referrals -
                   affiliate_amount
                 "
-                class="w-7/12 rounded-lg text-black p-1 pl-8 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 focus:ring-1"
+                class="md:w-7/12 rounded-lg text-black p-1 pl-8 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-green-500 focus:shadow-md focus:shadow-green-600 focus:ring-1"
               />
             </div>
           </form>

@@ -8,7 +8,7 @@ import ToastFormError from "@/components/ToastFormError.vue";
 // import { STOCKS, STOCKLength } from "@/stocks";
 import { show_input_info } from "./SignIn.vue";
 
-document.title = "If I Had Invested - Eric Nyaga";
+document.title = "If I Had Invested";
 
 /**the totalnumber of stocks fetched from the server */
 const numberOfStocks = ref(0);

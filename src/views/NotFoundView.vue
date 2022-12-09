@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 document.title =
-  "Page Does Not Exist in If I Had Invested Servers - Eric Nyaga";
+  "Page Does Not Exist in If I Had Invested Servers";
 </script>
 
 <template>

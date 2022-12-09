@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
+
+document.title = "Confirm Sign Up";
 </script>
 
 <template>
